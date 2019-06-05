@@ -1,0 +1,14 @@
+{application, journald_logger_backend,
+ [{description, ""},
+  {vsn, "0.1.0"},
+  {applications,
+   [kernel,
+    stdlib
+   ]},
+  {env,[]},
+  {modules, []},
+
+  {maintainers, ["Karol Moroz"]},
+  {licenses, ["MIT"]}
+  %% {links, [{"Github", "https://github.com/cogini/systemd_notify"}]}
+ ]}.
