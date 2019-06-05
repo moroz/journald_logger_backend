@@ -1,2 +1,5 @@
 /_build/
 *.beam
+.rebar3/
+ebin/
+*.crashdump
