@@ -21,11 +21,7 @@ handle_call(_, State) ->
 handle_event({Level, _, {_, Msg, Ts, Md}}, State) ->
     log_event(Level, Msg, Ts, Md, State);
 
-handle_event(flush, State) ->
-    {ok, State};
-
 handle_event(_, State) ->
-    io:format("received event~n"),
     {ok, State}.
 
 configure(Name) ->
@@ -44,7 +40,8 @@ parse_config(Config) when is_list(Config) ->
 
 log_event(Level, Msg, Ts, Md, State = #{formatter := F}) ->
     Text = F:format(Level, Msg, Ts, Md),
-    Metalist = [{"MESSAGE", Text},
-                {"PRIORITY", logger_journald_helper:level_to_num(Level)}],
+    Metalist = [{<<"MESSAGE">>, Text},
+                {<<"PRIORITY">>, logger_journald_helper:level_to_num(Level)}]
+               ++ F:format_metadata(Md),
     journald_api:sendv(Metalist),
     {ok, State}.
