@@ -1,4 +1,4 @@
--module(journald_logger_formatter).
+-module(logger_journald_formatter).
 
 -export([format/4]).
 

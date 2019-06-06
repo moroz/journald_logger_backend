@@ -1,4 +1,4 @@
--module(journald_logger_backend).
+-module(logger_journald_backend).
 
 -behaviour(gen_event).
 
