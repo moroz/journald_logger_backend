@@ -1,9 +1,10 @@
-{application, journald_logger_backend,
+{application, logger_journald_backend,
  [{description, ""},
   {vsn, "0.1.0"},
   {applications,
    [kernel,
-    stdlib
+    stdlib,
+    ejournald
    ]},
   {env,[]},
   {modules, []},

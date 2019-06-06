@@ -6,7 +6,7 @@
 
 -define(DEFAULTS, [
                    {level, info},
-                   {formatter, journald_logger_formatter}
+                   {formatter, logger_journald_formatter}
                   ]).
 
 init({?MODULE, Name}) ->
@@ -29,10 +29,8 @@ handle_event(_, State) ->
     {ok, State}.
 
 configure(Name) ->
-    {ok, Config} = application:get_env(?MODULE, Name),
-    State = parse_config(Config),
-    io:format("~p~n", [State]),
-    State.
+    Config = application:get_env(?MODULE, Name, #{}),
+    parse_config(Config).
 
 parse_config(Config) when is_map(Config) ->
     [Level, Formatter] =
@@ -43,7 +41,10 @@ parse_config(Config) when is_list(Config) ->
         [proplists:get_value(K, Config, Def) || {K, Def} <- ?DEFAULTS],
     #{formatter => Formatter, level => Level}.
 
+
 log_event(Level, Msg, Ts, Md, State = #{formatter := F}) ->
-    Output = F:format(Level, Msg, Ts, Md),
-    io:format(Output),
+    Text = F:format(Level, Msg, Ts, Md),
+    Metalist = [{"MESSAGE", Text},
+                {"PRIORITY", logger_journald_helper:level_to_num(Level)}],
+    journald_api:sendv(Metalist),
     {ok, State}.
