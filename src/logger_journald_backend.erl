@@ -43,5 +43,5 @@ log_event(Level, Msg, Ts, Md, State = #{formatter := F}) ->
     Metalist = [{<<"MESSAGE">>, Text},
                 {<<"PRIORITY">>, logger_journald_helper:level_to_num(Level)}]
                ++ F:format_metadata(Md),
-    journald_api:sendv(Metalist),
+    journald:send(Metalist),
     {ok, State}.
