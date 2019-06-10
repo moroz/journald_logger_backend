@@ -13,10 +13,8 @@ format(Level, Msg, _Timestamp, _Metadata) ->
     ].
 
 format_metadata(Metadata) ->
-    Metalist = [{format_key(K), logger_journald_helper:to_list(V)}
-      || {K, V} <- Metadata],
-    io:format("~p~n", [Metalist])
-.
+    [{format_key(K), logger_journald_helper:to_list(V)}
+      || {K, V} <- Metadata].
 
 format_key(K) ->
     List = normalize_key(K),
